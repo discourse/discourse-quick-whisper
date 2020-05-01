@@ -30,7 +30,7 @@ function createWhisper() {
 }
 
 export default {
-  name: "discourse-take-turn",
+  name: "discourse-quick-whisper",
 
   initialize() {
     withPluginApi("0.8.7", api => {
@@ -49,15 +49,15 @@ export default {
       );
 
       api.registerTopicFooterButton({
-        id: "take-turn",
+        id: "quick-whisper",
         icon() {
-          return "hand-point-up";
+          return "bolt";
         },
         title() {
-          return themePrefix("take_turn");
+          return themePrefix("quick_whisper");
         },
         label() {
-          return themePrefix("take_turn");
+          return themePrefix("quick_whisper");
         },
         action() {
           debounce(api, createWhisper, api, 5000, true);
@@ -65,7 +65,7 @@ export default {
         dropdown() {
           return this.site.mobileView;
         },
-        classNames: ["take-turn"],
+        classNames: ["quick-whisper"],
         displayed() {
           return (
             this.site.mobileView && this.currentUser && this.currentUser.staff

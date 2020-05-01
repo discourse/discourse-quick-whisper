@@ -1,5 +1,5 @@
 svg_icons:
-  default: "hand-point-up"
+  default: "bolt"
   type: "list"
   list_type: "compact"
 message:
