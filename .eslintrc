@@ -1,0 +1,7 @@
+{
+  "extends": "eslint-config-discourse",
+  "globals": {
+    "themePrefix": "on",
+    "settings": "on"
+  }
+}

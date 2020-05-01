@@ -1,0 +1,6 @@
+svg_icons:
+  default: "hand-point-up"
+  type: "list"
+  list_type: "compact"
+message:
+  default: "I am looking at this :eyes:"
