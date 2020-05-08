@@ -11,17 +11,34 @@ function fetchCurrentTopic(container) {
   }
 }
 
-function createWhisper() {
+function assignSelf() {
   const topic = fetchCurrentTopic(this.container);
   if (!topic) {
     return;
   }
 
-  return this.container
+  const user = this.getCurrentUser();
+
+  if (user.can_assign) {
+    const taskActions = this.container.lookup("service:task-actions");
+    const assignedUser = topic.get("assigned_to_user.username");
+
+    if (assignedUser) {
+      return createWhisper(this.container, topic.id);
+    } else if (taskActions) {
+      return taskActions.assignUserToTopic(user, topic);
+    }
+  } else {
+    return createWhisper(this.container, topic.id);
+  }
+}
+
+function createWhisper(container, topicId) {
+  return container
     .lookup("store:main")
     .createRecord("post", {
       raw: settings.message,
-      topic_id: topic.id,
+      topic_id: topicId,
       whisper: true,
       archetype: "regular",
       nested_post: true
@@ -42,7 +59,7 @@ export default {
 
       api.addKeyboardShortcut(
         "ctrl+shift+l",
-        () => debounce(api, createWhisper, 5000, true),
+        () => debounce(api, assignSelf, 5000, true),
         {
           global: true
         }
@@ -60,7 +77,7 @@ export default {
           return themePrefix("quick_whisper");
         },
         action() {
-          debounce(api, createWhisper, api, 5000, true);
+          debounce(api, assignSelf, 5000, true);
         },
         dropdown() {
           return this.site.mobileView;
