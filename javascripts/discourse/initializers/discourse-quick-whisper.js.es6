@@ -6,7 +6,7 @@ export default {
   name: "discourse-quick-whisper",
 
   initialize() {
-    withPluginApi("0.8.7", api => {
+    withPluginApi("0.8.7", (api) => {
       const currentUser = api.getCurrentUser();
 
       if (!currentUser || !currentUser.staff) {
@@ -27,14 +27,11 @@ export default {
       // attempt to destroy any assign/unassign message related to currentUser
       // and remove previous quick whisper done by currentUser in the last 20 posts
       function cleanTopic(topic) {
-        return TextLib.cookAsync(settings.message).then(cooked => {
+        return TextLib.cookAsync(settings.message).then((cooked) => {
           if (topic.postStream && !topic.postStream.lastPostNotLoaded) {
-            const posts = topic.postStream.posts
-              .slice()
-              .reverse()
-              .slice(0, 20);
+            const posts = topic.postStream.posts.slice().reverse().slice(0, 20);
 
-            posts.forEach(post => {
+            posts.forEach((post) => {
               if (
                 (post.action_code === "assigned" ||
                   post.action_code === "unassigned") &&
@@ -90,7 +87,7 @@ export default {
             topic_id: topicId,
             whisper: true,
             archetype: "regular",
-            nested_post: true
+            nested_post: true,
           })
           .save();
       }
@@ -99,34 +96,50 @@ export default {
         "ctrl+shift+l",
         () => debounce(api, assignSelf, 5000, true),
         {
-          global: true
+          global: true,
         }
       );
 
+      function buttonLabel() {
+        const topic = fetchCurrentTopic(),
+          assignedUser = topic.get("assigned_to_user.username"),
+          siteSettings = api.container.lookup("site-settings:main");
+
+        if (assignedUser && assignedUser === currentUser.username) {
+          return "";
+        }
+
+        if (assignedUser && assignedUser !== currentUser.username) {
+          return siteSettings.enable_whispers
+            ? themePrefix("looking_into_this")
+            : "";
+        }
+
+        return themePrefix("self_assign");
+      }
+
       api.registerTopicFooterButton({
         id: "quick-whisper",
-        icon() {
-          return "bolt";
+        icon: "bolt",
+        title() {
+          return buttonLabel();
         },
         title() {
-          return themePrefix("quick_whisper");
-        },
-        label() {
-          return themePrefix("quick_whisper");
+          return buttonLabel();
         },
         action() {
           debounce(api, assignSelf, 5000, true);
         },
-        dropdown() {
-          return this.site.mobileView;
-        },
+        dropdown: true,
         classNames: ["quick-whisper"],
         displayed() {
-          return (
-            this.site.mobileView && this.currentUser && this.currentUser.staff
-          );
-        }
+          if (!this.site.mobileView || buttonLabel() == "") {
+            return false;
+          }
+
+          return true;
+        },
       });
     });
-  }
+  },
 };
