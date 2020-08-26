@@ -6,7 +6,7 @@ export default {
   name: "discourse-quick-whisper",
 
   initialize() {
-    withPluginApi("0.8.7", (api) => {
+    withPluginApi("0.8.7", api => {
       const currentUser = api.getCurrentUser();
 
       if (!currentUser || !currentUser.staff) {
@@ -27,11 +27,14 @@ export default {
       // attempt to destroy any assign/unassign message related to currentUser
       // and remove previous quick whisper done by currentUser in the last 20 posts
       function cleanTopic(topic) {
-        return TextLib.cookAsync(settings.message).then((cooked) => {
+        return TextLib.cookAsync(settings.message).then(cooked => {
           if (topic.postStream && !topic.postStream.lastPostNotLoaded) {
-            const posts = topic.postStream.posts.slice().reverse().slice(0, 20);
+            const posts = topic.postStream.posts
+              .slice()
+              .reverse()
+              .slice(0, 20);
 
-            posts.forEach((post) => {
+            posts.forEach(post => {
               if (
                 (post.action_code === "assigned" ||
                   post.action_code === "unassigned") &&
@@ -87,7 +90,7 @@ export default {
             topic_id: topicId,
             whisper: true,
             archetype: "regular",
-            nested_post: true,
+            nested_post: true
           })
           .save();
       }
@@ -96,7 +99,7 @@ export default {
         "ctrl+shift+l",
         () => debounce(api, assignSelf, 5000, true),
         {
-          global: true,
+          global: true
         }
       );
 
@@ -133,13 +136,13 @@ export default {
         dropdown: true,
         classNames: ["quick-whisper"],
         displayed() {
-          if (!this.site.mobileView || buttonLabel() == "") {
+          if (!this.site.mobileView || buttonLabel() === "") {
             return false;
           }
 
           return true;
-        },
+        }
       });
     });
-  },
+  }
 };
