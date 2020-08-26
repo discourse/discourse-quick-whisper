@@ -56,7 +56,11 @@ export default {
         });
       }
 
-      function assignSelf() {
+      function debouncedTrackTopic() {
+        debounce(api, trackTopic, 5000, true);
+      }
+
+      function trackTopic() {
         const topic = fetchCurrentTopic();
         if (!topic) {
           return;
@@ -95,13 +99,9 @@ export default {
           .save();
       }
 
-      api.addKeyboardShortcut(
-        "ctrl+shift+l",
-        () => debounce(api, assignSelf, 5000, true),
-        {
-          global: true
-        }
-      );
+      api.addKeyboardShortcut("ctrl+shift+l", debouncedTrackTopic, {
+        global: true
+      });
 
       function buttonLabel() {
         const topic = fetchCurrentTopic(),
@@ -131,7 +131,7 @@ export default {
           return buttonLabel();
         },
         action() {
-          debounce(api, assignSelf, 5000, true);
+          debouncedTrackTopic();
         },
         dropdown: true,
         classNames: ["quick-whisper"],
