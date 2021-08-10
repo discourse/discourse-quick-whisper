@@ -1,6 +1,7 @@
 import TextLib from "discourse/lib/text";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { debounce } from "@ember/runloop";
+import { getAbsoluteURL } from "discourse-common/lib/get-url";
 
 export default {
   name: "discourse-quick-whisper",
@@ -44,7 +45,7 @@ export default {
               } else if (
                 cooked.string ===
                   post.cooked.replace(
-                    Discourse.BaseUrl.replace(/http(s)?:/g, ""),
+                    getAbsoluteURL("").replace(/http(s)?:/g, ""),
                     ""
                   ) &&
                 post.user_id === currentUser.id
