@@ -88,6 +88,11 @@ export default {
       }
 
       function createWhisper(container, topicId) {
+        const siteSettings = container.lookup("site-settings:main");
+        if (!siteSettings.enable_whispers) {
+          return;
+        }
+
         return container
           .lookup("store:main")
           .createRecord("post", {
