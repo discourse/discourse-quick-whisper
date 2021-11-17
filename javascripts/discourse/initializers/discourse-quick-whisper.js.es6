@@ -79,7 +79,7 @@ export default {
                 return createWhisper(api.container, topic.id);
               }
             } else if (taskActions) {
-              return taskActions.assignUserToTopic(currentUser, topic);
+              return taskActions.reassignUserToTopic(currentUser, topic);
             }
           } else {
             return createWhisper(api.container, topic.id);
