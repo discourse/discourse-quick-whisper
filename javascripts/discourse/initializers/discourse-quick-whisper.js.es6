@@ -94,7 +94,7 @@ export default {
         }
 
         return container
-          .lookup("store:main")
+          .lookup("service:store")
           .createRecord("post", {
             raw: settings.message,
             topic_id: topicId,
