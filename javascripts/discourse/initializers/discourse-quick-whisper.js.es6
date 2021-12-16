@@ -2,6 +2,7 @@ import TextLib from "discourse/lib/text";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { debounce } from "@ember/runloop";
 import { getAbsoluteURL } from "discourse-common/lib/get-url";
+import { popupAjaxError } from "discourse/lib/ajax-error";
 
 export default {
   name: "discourse-quick-whisper",
@@ -79,7 +80,9 @@ export default {
                 return createWhisper(api.container, topic.id);
               }
             } else if (taskActions) {
-              return taskActions.reassignUserToTopic(currentUser, topic);
+              return taskActions
+                .reassignUserToTopic(currentUser, topic)
+                .catch(popupAjaxError);
             }
           } else {
             return createWhisper(api.container, topic.id);
