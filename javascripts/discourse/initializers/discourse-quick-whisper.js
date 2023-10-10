@@ -1,4 +1,4 @@
-import TextLib from "discourse/lib/text";
+import { cookAsync } from "discourse/lib/text";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { debounce } from "@ember/runloop";
 import { getAbsoluteURL } from "discourse-common/lib/get-url";
@@ -29,7 +29,7 @@ export default {
       // attempt to destroy any assign/unassign message related to currentUser
       // and remove previous quick whisper done by currentUser in the last 20 posts
       function cleanTopic(topic) {
-        return TextLib.cookAsync(settings.message).then((cooked) => {
+        return cookAsync(settings.message).then((cooked) => {
           if (topic.postStream && !topic.postStream.lastPostNotLoaded) {
             const posts = topic.postStream.posts.slice().reverse().slice(0, 20);
 
