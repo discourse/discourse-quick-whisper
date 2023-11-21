@@ -11,7 +11,9 @@ export default {
     withPluginApi("0.8.7", (api) => {
       const currentUser = api.getCurrentUser();
 
-      if (!currentUser || !currentUser.staff) {
+      const canUseFeature = currentUser?.whisperer || currentUser?.can_assign;
+
+      if (!canUseFeature) {
         return;
       }
 
