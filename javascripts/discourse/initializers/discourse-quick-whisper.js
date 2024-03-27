@@ -1,8 +1,8 @@
-import { cook } from "discourse/lib/text";
-import { withPluginApi } from "discourse/lib/plugin-api";
 import { debounce } from "@ember/runloop";
-import { getAbsoluteURL } from "discourse-common/lib/get-url";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { withPluginApi } from "discourse/lib/plugin-api";
+import { cook } from "discourse/lib/text";
+import { getAbsoluteURL } from "discourse-common/lib/get-url";
 
 export default {
   name: "discourse-quick-whisper",
@@ -90,7 +90,7 @@ export default {
       }
 
       function createWhisper(container, topicId) {
-        const siteSettings = container.lookup("site-settings:main");
+        const siteSettings = container.lookup("service:site-settings");
         if (!siteSettings.enable_whispers) {
           return;
         }
@@ -114,7 +114,7 @@ export default {
       function buttonLabel() {
         const topic = fetchCurrentTopic(),
           assignedUser = topic.get("assigned_to_user.username"),
-          siteSettings = api.container.lookup("site-settings:main");
+          siteSettings = api.container.lookup("service:site-settings");
 
         if (assignedUser && assignedUser === currentUser.username) {
           return "";
@@ -132,9 +132,6 @@ export default {
       api.registerTopicFooterButton({
         id: "quick-whisper",
         icon: "bolt",
-        title() {
-          return buttonLabel();
-        },
         title() {
           return buttonLabel();
         },
