@@ -132,6 +132,9 @@ export default {
       api.registerTopicFooterButton({
         id: "quick-whisper",
         icon: "bolt",
+        label() {
+          return buttonLabel();
+        },
         title() {
           return buttonLabel();
         },
@@ -141,11 +144,7 @@ export default {
         dropdown: true,
         classNames: ["quick-whisper"],
         displayed() {
-          if (!this.site.mobileView || buttonLabel() === "") {
-            return false;
-          }
-
-          return true;
+          return this.site.mobileView && buttonLabel() !== "";
         },
       });
     });
