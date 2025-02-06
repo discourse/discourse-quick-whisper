@@ -1,8 +1,8 @@
 import { debounce } from "@ember/runloop";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { getAbsoluteURL } from "discourse/lib/get-url";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { cook } from "discourse/lib/text";
-import { getAbsoluteURL } from "discourse-common/lib/get-url";
 
 export default {
   name: "discourse-quick-whisper",
