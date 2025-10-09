@@ -8,7 +8,7 @@ export default {
   name: "discourse-quick-whisper",
 
   initialize() {
-    withPluginApi("0.8.7", (api) => {
+    withPluginApi((api) => {
       const currentUser = api.getCurrentUser();
 
       const canUseFeature = currentUser?.whisperer || currentUser?.can_assign;
